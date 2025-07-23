@@ -4,9 +4,9 @@ from pathlib import Path
 import datetime
 
 # ──────────────────────────────
-# Red-flag phishing patterns
+# Red-flag phishing patterns (pre-compiled regex for efficiency)
 # ──────────────────────────────
-red_flags = [
+red_flags_patterns = [
     r"(verify|update|review|confirm).{0,15}(account|information|details)",
     r"your account (has been|is) (locked|suspended|limited)",
     r"(click|tap|follow).{0,10}(link|here|below)",
@@ -18,6 +18,8 @@ red_flags = [
     r"(https?:\/\/)?[^\s]+(\.ru|\.xyz|\.tk|mysecureportal\.com)",
 ]
 
+red_flags = [re.compile(p, re.IGNORECASE) for p in red_flags_patterns]
+
 suspicious_domains = [".ru", ".xyz", ".tk", "mysecureportal.com"]
 
 # ──────────────────────────────
@@ -28,7 +30,7 @@ def extract_urls(text):
 
 def is_phishing(email_text):
     lowered = email_text.lower()
-    matches = [pattern for pattern in red_flags if re.search(pattern, lowered)]
+    matches = [pattern.pattern for pattern in red_flags if pattern.search(lowered)]
     confidence = int((len(matches) / len(red_flags)) * 100)
 
     url_list = extract_urls(email_text)
@@ -47,7 +49,9 @@ def report_phishing(email_text):
     report_file = Path("reported_phishing.txt")
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     entry = f"{timestamp}\n{email_text}\n---\n"
-    report_file.write_text(report_file.read_text() + entry if report_file.exists() else entry)
+    # Append instead of reading full content every time
+    with report_file.open("a", encoding="utf-8") as f:
+        f.write(entry)
     return "🚨 Report submitted. Thank you!"
 
 # ──────────────────────────────
@@ -87,7 +91,8 @@ if check:
         msg, is_flagged, patterns, score, urls, risky_urls = is_phishing(email_input)
 
         st.markdown(msg)
-        st.progress(score)
+        # Progress bar expects value between 0.0 and 1.0
+        st.progress(score / 100)
 
         st.markdown(f"**Confidence Score:** {score}%")
         st.markdown("**Matched Patterns:**")
@@ -106,6 +111,7 @@ if check:
 
         st.markdown(f"🕒 **Last Scan:** {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
+        # Show report button only if phishing suspected
         if is_flagged:
             if st.button("🚨 Report This Message"):
                 msg = report_phishing(email_input)
@@ -127,4 +133,10 @@ Message:
 ---------
 {email_input}
 """
-            st.download_button("⬇️ Download Report", report_text, file_name="phishing_report.txt")
+            st.download_button(
+                "⬇️ Download Report",
+                report_text,
+                file_name="phishing_report.txt",
+                mime="text/plain"
+            )
+
