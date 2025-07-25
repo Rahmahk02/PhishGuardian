@@ -3,6 +3,13 @@ import re
 from pathlib import Path
 import datetime
 
+# Initialize session state for email_input so we can safely assign to it later
+if "email_input" not in st.session_state:
+    st.session_state.email_input = ""
+
+if "last_scan" not in st.session_state:
+    st.session_state.last_scan = "No scans yet"
+
 # ──────────────────────────────
 # Red-flag phishing patterns (pre-compiled regex for efficiency)
 # ──────────────────────────────
@@ -73,15 +80,12 @@ with st.expander("📋 What Does This Tool Look For?"):
 
 email_input = st.text_area("📨 Paste the email or message here:", height=300, key="email_input")
 
-if "last_scan" not in st.session_state:
-    st.session_state.last_scan = "No scans yet"
-
 col1, col2 = st.columns(2)
 check = col1.button("🔍 Scan for Phishing")
 clear = col2.button("🧹 Reset")
 
 if clear:
-    st.session_state.email_input = ""  # Clear the text area
+    st.session_state.email_input = ""  # Clear the input safely
 
 if check:
     if st.session_state.email_input.strip() == "":
@@ -135,4 +139,5 @@ Message:
                 file_name="phishing_report.txt",
                 mime="text/plain"
             )
+
 
