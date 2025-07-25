@@ -3,16 +3,13 @@ import re
 from pathlib import Path
 import datetime
 
-# Initialize session state for email_input so we can safely assign to it later
+# Initialize session state
 if "email_input" not in st.session_state:
     st.session_state.email_input = ""
 
-if "last_scan" not in st.session_state:
-    st.session_state.last_scan = "No scans yet"
+def clear_text():
+    st.session_state.email_input = ""
 
-# ──────────────────────────────
-# Red-flag phishing patterns (pre-compiled regex for efficiency)
-# ──────────────────────────────
 red_flags_patterns = [
     r"(verify|update|review|confirm).{0,15}(account|information|details)",
     r"your account (has been|is) (locked|suspended|limited)",
@@ -29,9 +26,6 @@ red_flags = [re.compile(p, re.IGNORECASE) for p in red_flags_patterns]
 
 suspicious_domains = [".ru", ".xyz", ".tk", "mysecureportal.com"]
 
-# ──────────────────────────────
-# Detection Logic
-# ──────────────────────────────
 def extract_urls(text):
     return re.findall(r"https?://[^\s)>\]]+", text, re.IGNORECASE)
 
@@ -60,9 +54,6 @@ def report_phishing(email_text):
         f.write(entry)
     return "🚨 Report submitted. Thank you!"
 
-# ──────────────────────────────
-# Streamlit UI
-# ──────────────────────────────
 st.set_page_config(page_title="Phishing Detector", page_icon="🛡️")
 st.title("🛡️ Phishing Detector & Reporter")
 
@@ -82,10 +73,7 @@ email_input = st.text_area("📨 Paste the email or message here:", height=300, 
 
 col1, col2 = st.columns(2)
 check = col1.button("🔍 Scan for Phishing")
-clear = col2.button("🧹 Reset")
-
-if clear:
-    st.session_state.email_input = ""  # Clear the input safely
+clear = col2.button("🧹 Reset", on_click=clear_text)  # <-- callback here
 
 if check:
     if st.session_state.email_input.strip() == "":
@@ -139,5 +127,3 @@ Message:
                 file_name="phishing_report.txt",
                 mime="text/plain"
             )
-
-
