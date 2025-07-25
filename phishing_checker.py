@@ -49,7 +49,6 @@ def report_phishing(email_text):
     report_file = Path("reported_phishing.txt")
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     entry = f"{timestamp}\n{email_text}\n---\n"
-    # Append instead of reading full content every time
     with report_file.open("a", encoding="utf-8") as f:
         f.write(entry)
     return "🚨 Report submitted. Thank you!"
@@ -72,7 +71,7 @@ with st.expander("📋 What Does This Tool Look For?"):
     - 💳 Fake **security/tax/billing alerts**
     """)
 
-email_input = st.text_area("📨 Paste the email or message here:", height=300)
+email_input = st.text_area("📨 Paste the email or message here:", height=300, key="email_input")
 
 if "last_scan" not in st.session_state:
     st.session_state.last_scan = "No scans yet"
@@ -82,19 +81,18 @@ check = col1.button("🔍 Scan for Phishing")
 clear = col2.button("🧹 Reset")
 
 if clear:
-    st.experimental_rerun()
+    st.session_state.email_input = ""  # Clear the text area
 
 if check:
-    if email_input.strip() == "":
+    if st.session_state.email_input.strip() == "":
         st.warning("⚠️ Please paste some content first.")
     else:
-        msg, is_flagged, patterns, score, urls, risky_urls = is_phishing(email_input)
+        msg, is_flagged, patterns, score, urls, risky_urls = is_phishing(st.session_state.email_input)
 
         st.markdown(msg)
-        # Progress bar expects value between 0.0 and 1.0
         st.progress(score / 100)
-
         st.markdown(f"**Confidence Score:** {score}%")
+
         st.markdown("**Matched Patterns:**")
         if patterns:
             st.markdown("\n".join([f"• `{p}`" for p in patterns]))
@@ -111,13 +109,11 @@ if check:
 
         st.markdown(f"🕒 **Last Scan:** {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
-        # Show report button only if phishing suspected
         if is_flagged:
             if st.button("🚨 Report This Message"):
-                msg = report_phishing(email_input)
+                msg = report_phishing(st.session_state.email_input)
                 st.success(msg)
 
-            # Downloadable report
             report_text = f"""Phishing Report
 ====================
 Time: {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
@@ -131,7 +127,7 @@ Links:
 
 Message:
 ---------
-{email_input}
+{st.session_state.email_input}
 """
             st.download_button(
                 "⬇️ Download Report",
