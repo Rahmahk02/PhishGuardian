@@ -1,0 +1,19 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Report log
+reported_phishing.txt
+
+# Virtual environments
+.env/
+.venv/
+venv/
+ENV/
+
+# Streamlit cache
+.streamlit/
+
+# VS Code settings
+.vscode/
