@@ -47,7 +47,7 @@ def is_phishing(email_text):
     return msg, len(matches) >= 2, matches, confidence, url_list, risky_urls
 
 def report_phishing(email_text):
-    report_file = Path("reported_phishing.txt")
+    report_file = Path("phishing_report.txt")
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     entry = f"{timestamp}\n{email_text}\n---\n"
     with report_file.open("a", encoding="utf-8") as f:
