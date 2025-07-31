@@ -4,7 +4,7 @@ __pycache__/
 *.pyo
 
 # Report log
-reported_phishing.txt
+phishing_report.txt
 
 # Virtual environments
 .env/
