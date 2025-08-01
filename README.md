@@ -24,5 +24,7 @@ git clone https://github.com/Rahmahk02/PhishGuardian.git
 cd PhishGuardian
 pip install -r requirements.txt
 
+```bash
+▶️ Run the App
 streamlit run app.py
 
