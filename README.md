@@ -22,9 +22,9 @@ This is a simple Streamlit web app that detects phishing messages and helps user
 ```bash
 git clone https://github.com/Rahmahk02/PhishGuardian.git
 cd PhishGuardian
-pip install -r requirements.txt
+pip install -r requirements.txt```
 
 ```bash
 ▶️ Run the App
-streamlit run app.py
+streamlit run app.py```
 
