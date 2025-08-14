@@ -22,9 +22,20 @@ PhishGuardian is a simple Streamlit web app that detects phishing messages and h
 ---
 
 ## 🛠 Installation & Run
+
+1. **Open your terminal / command prompt**  
+   - **Windows:** Press `Win + R`, type `cmd` or `powershell`, and hit Enter  
+   - **macOS:** Open **Terminal** from Applications → Utilities  
+   - **Linux:** Open your preferred terminal  
+
+2. **Check Python is installed**  
+   ```bash
+   python3 --version
 1. **Clone the repository**  
 ```bash
   git clone https://github.com/Rahmahk02/PhishGuardian.git
+```
+```bash
   cd PhishGuardian
 ```
 2. **Install dependencies**
