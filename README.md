@@ -1,8 +1,13 @@
 # 🛡️ PhishGuardian
 
-**🔗 Live App:** [Try it on Streamlit](https://phishguardian-6z94cyj7yavmezselurvjn.streamlit.app/#phishing-detector-and-reporter)
-
 PhishGuardian is a simple Streamlit web app that detects phishing messages and helps users report suspicious emails. It scans for red flags like suspicious phrases, risky URLs, urgency triggers, and fake alerts.
+
+---
+
+## ⚡ Quick Try (Live Version)
+1. Open the [Live App link](https://phishguardian-6z94cyj7yavmezselurvjn.streamlit.app/#phishing-detector-and-reporter) in your browser.  
+2. If prompted, click **“Wake up”** or similar to start the app.  
+3. Start detecting and reporting phishing emails immediately—no installation needed.  
 
 ---
 
