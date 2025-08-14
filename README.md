@@ -29,5 +29,7 @@ PhishGuardian is a simple Streamlit web app that detects phishing messages and h
 ```
 2. **Install dependencies**
   pip install -r requirements.txt
+```
 3. **Run the app**
   streamlit run phishing_checker.py
+```
