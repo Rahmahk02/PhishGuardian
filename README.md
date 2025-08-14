@@ -35,7 +35,7 @@ PhishGuardian is a simple Streamlit web app that detects phishing messages and h
 
 2. **Check Python is installed**  
    ```bash
-   python3 --version
+   python --version
 1. **Clone the repository**  
 ```bash
   git clone https://github.com/Rahmahk02/PhishGuardian.git
